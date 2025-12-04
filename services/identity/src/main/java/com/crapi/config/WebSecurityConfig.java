@@ -42,6 +42,8 @@ public class WebSecurityConfig {
 
   @Autowired JwtAuthEntryPoint jwtUnauthorizedHandler;
 
+  @Autowired ExtendedLoggingFilter extendedLoggingFilter;
+
   @Bean
   public JwtAuthTokenFilter authenticationJwtTokenFilter() {
     return new JwtAuthTokenFilter();
@@ -90,6 +92,7 @@ public class WebSecurityConfig {
                     .hasRole("ADMIN")
                     .anyRequest()
                     .authenticated())
+        .addFilterBefore(extendedLoggingFilter, UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

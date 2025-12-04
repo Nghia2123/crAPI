@@ -39,6 +39,7 @@ func (server *Server) InitializeRoutes() *mux.Router {
 
 	controller.Client = server.Client
 
+	server.Router.Use(middlewares.ExtendedLoggingMiddleware)
 	server.Router.Use(middlewares.AccessControlMiddleware)
 	if os.Getenv("DEBUG") == "1" {
 		server.Router.PathPrefix("/debug/pprof/").Handler(http.DefaultServeMux)

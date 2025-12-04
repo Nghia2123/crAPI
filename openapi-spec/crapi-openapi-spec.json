@@ -11,6 +11,59 @@
   "servers" : [ {
     "url" : "http://localhost:8888"
   } ],
+  "links" : {
+    "SignupToLogin" : {
+      "operationId" : "login",
+      "parameters" : {
+        "email" : "$request.body#/email",
+        "password" : "$request.body#/password"
+      },
+      "description" : "After signing up, user can login with the same credentials"
+    },
+    "LoginToDashboard" : {
+      "operationId" : "get_dashboard",
+      "description" : "After successful login, retrieve user dashboard with JWT token"
+    },
+    "AddVehicleToGetLocation" : {
+      "operationId" : "get_location",
+      "parameters" : {
+        "vehicleId" : "$request.body#/vin"
+      },
+      "description" : "After adding a vehicle, retrieve its location information"
+    },
+    "CreatePostToCommentPost" : {
+      "operationId" : "post_comment",
+      "parameters" : {
+        "postId" : "$response.body#/id"
+      },
+      "description" : "After creating a post, users can add comments to it"
+    },
+    "ValidateCouponToApplyCoupon" : {
+      "operationId" : "apply_coupon",
+      "parameters" : {
+        "coupon_code" : "$request.body#/coupon_code"
+      },
+      "description" : "After validating a coupon, apply it to get discount"
+    },
+    "CreateOrderToUpdateOrder" : {
+      "operationId" : "update_order",
+      "parameters" : {
+        "order_id" : "$response.body#/id"
+      },
+      "description" : "After creating an order, it can be updated with new quantity"
+    },
+    "CreateOrderToReturnOrder" : {
+      "operationId" : "return_order",
+      "parameters" : {
+        "order_id" : "$response.body#/id"
+      },
+      "description" : "After creating an order, it can be returned if eligible"
+    },
+    "ContactMechanicToGetReport" : {
+      "operationId" : "get_report_byID",
+      "description" : "After contacting a mechanic, retrieve the service report details"
+    }
+  },
   "paths" : {
     "/identity/api/auth/signup" : {
       "post" : {
@@ -56,7 +109,17 @@
                 }
               }
             },
-            "description" : "User successfully registered"
+            "description" : "User successfully registered",
+            "links" : {
+              "SignupToLogin" : {
+                "operationId" : "login",
+                "parameters" : {
+                  "email" : "$request.body#/email",
+                  "password" : "$request.body#/password"
+                },
+                "description" : "After signup, use same credentials to login"
+              }
+            }
           },
           "403" : {
             "content" : {
@@ -117,7 +180,13 @@
                 }
               }
             },
-            "description" : ""
+            "description" : "",
+            "links" : {
+              "LoginToDashboard" : {
+                "operationId" : "get_dashboard",
+                "description" : "After successful login, retrieve user dashboard with JWT token"
+              }
+            }
           },
           "500" : {
             "content" : {
@@ -1046,7 +1115,16 @@
                 }
               }
             },
-            "description" : ""
+            "description" : "",
+            "links" : {
+              "AddVehicleToGetLocation" : {
+                "operationId" : "get_location",
+                "parameters" : {
+                  "vehicleId" : "$response.body#/id"
+                },
+                "description" : "After adding a vehicle, retrieve its location information"
+              }
+            }
           },
           "403" : {
             "content" : {
@@ -1276,7 +1354,16 @@
                 }
               }
             },
-            "description" : ""
+            "description" : "",
+            "links" : {
+              "CreatePostToCommentPost" : {
+                "operationId" : "post_comment",
+                "parameters" : {
+                  "postId" : "$response.body#/id"
+                },
+                "description" : "After creating a post, users can add comments to it"
+              }
+            }
           }
         }
       },
@@ -1624,6 +1711,15 @@
                   "$ref" : "#/components/schemas/ValidateCouponResponse"
                 }
               }
+            },
+            "links" : {
+              "ValidateCouponToApplyCoupon" : {
+                "operationId" : "apply_coupon",
+                "parameters" : {
+                  "coupon_code" : "$response.body#/coupon_code"
+                },
+                "description" : "After validating a coupon, apply it to get discount"
+              }
             }
           },
           "400" : {
@@ -1770,7 +1866,23 @@
                 }
               }
             },
-            "description" : "OK"
+            "description" : "OK",
+            "links" : {
+              "CreateOrderToUpdateOrder" : {
+                "operationId" : "update_order",
+                "parameters" : {
+                  "order_id" : "$response.body#/id"
+                },
+                "description" : "After creating an order, it can be updated with new quantity"
+              },
+              "CreateOrderToReturnOrder" : {
+                "operationId" : "return_order",
+                "parameters" : {
+                  "order_id" : "$response.body#/id"
+                },
+                "description" : "After creating an order, it can be returned if eligible"
+              }
+            }
           },
           "400" : {
             "content" : {
@@ -2461,6 +2573,15 @@
                   },
                   "status" : 200
                 }
+              }
+            },
+            "links" : {
+              "ContactMechanicToGetReport" : {
+                "operationId" : "get_report_byID",
+                "parameters" : {
+                  "report_id" : "$response.body#/response_from_mechanic_api/id"
+                },
+                "description" : "After contacting a mechanic, retrieve the service report details"
               }
             }
           },
